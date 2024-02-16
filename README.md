@@ -149,9 +149,6 @@ Environmental Sensors
 ```
 * The script installs a tool called picotool
 ```
-picotool --help
-ERROR: Expected command name before any options
-
 SYNOPSIS:
     picotool info [-b] [-p] [-d] [-l] [-a] [--bus <bus>] [--address <addr>] [-f] [-F]
     picotool info [-b] [-p] [-d] [-l] [-a] <filename> [-t <type>]
