@@ -112,6 +112,8 @@ Counter clockwise
 
 ### DeskPi PicoMate Features
 ```
+Built-in battery connector for on-the-go projects
+
 User Interface - Inputs
     Button ( GPIO )
         GP26
