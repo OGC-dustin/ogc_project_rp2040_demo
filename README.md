@@ -1,8 +1,8 @@
 # OGC.Engineering
-### ogc-dev-rp2040 - Exploration of the RP2040 on a Raspberry Pi Pico W
+### ogc_project_rp2040_demo - Exploration of the RP2040 on a Raspberry Pi Pico W
 developer contact - dustin ( at ) ogc.engineering
 
---
+---
 
 ## Repository Information
 * Purpose
@@ -10,8 +10,9 @@ developer contact - dustin ( at ) ogc.engineering
 * Development Steps
     - Clone
 ```
-git clone https://github.com/OGC-dustin/ogc-dev-rp2040.git
+git clone https://github.com/OGC-dustin/ogc_project_rp2040_demo.git
 git checkout <branch of interest>
+git submodule update --init
 ```
 * Branches
     - Micro Python based development
@@ -26,16 +27,33 @@ git checkout <branch of interest>
         - various feature branches as needed
 * Filesystem Layout - Layered Development
     * documentation - it's documentation... not much else to say about it
-    * projects - example projects showing one or more deployments, documentation, etc. that fully define a project
-    * deployments - example deployments showing collections of software, firmware, and a hardware needed to create a deployable image
-    * software
-        * applications - applications quide device operations
-        * libraries - hardware independent support logic
-    * firmware - hardware dependent source files to meet software interface
-        * hal - abstraction of hardware and firmware to meet the software interface
-        * drivers - hardware specific support logic
-        * csp - manufacturer chip support package(s), all the base level functionality buiilding blocks
-    * hardware - hardware dependent defintions of capabilities and abstraction from csp defined pin/port names
+    * deployment(s) - collections of software, firmware, and a hardware needed to create a deployable image
+        * software
+            * applications - applications quide device operations
+            * libraries - hardware independent support logic
+        * firmware - hardware dependent source files to meet software interface
+            * hal - abstraction of hardware and firmware to meet the software interface
+                * "hal.h" - generic redirection to hal layers
+                * "ogc_fw_hal_rp_2040_button" - Button ( GPIO )
+                * "ogc_fw_hal_rp_2040_encoder" - Rotary Encoder ( GPIO )
+                * "ogc_fw_hal_rp_2040_buzzer" - Buzzer ( Generic PWM )
+            * drivers - hardware specific support logic
+                * "ogc_fw_drv_zts6531s" - Microphone [ ZTS6531S ] ( PDM )
+                * "ogc_fw_drv_ws2812" - RGB Lights [ WS2812 ] ( GPIO )
+                * "ogc_fw_drv_ssd1315" - OLED Display 128x64 [ SSD1315 ] ( I2C0, addr 0x3C )
+                * "ogc_fw_drv_lsm6ds3tr_c" - Gyroscope Sensor [ LSM6DS3TR-C ] ( I2C1, addr 0x6A )
+                * "ogc_fw_drv_mmc5603nj" - 3-Axis Magnetometer Sensor [ MMC5603NJ ] ( I2C1, addr 0x30 )
+                * "ogc_fw_drv_ltr_381rgb_01" - Photosensitive Sensor [ LTR-381RGB-01 ] ( I2C1, addr 0x53 )
+                * "ogc_fw_drv_sht30_dis" - Temperature and Humidity Sensor [ SHT30-DIS ] ( I2C1, addr 0x44 )
+                * "ogc_fw_drv_as312" - PIR Sensor [ AS312 ] ( GPIO )
+                * "ogc_fw_drv_infineon_43439" - 2.4GHz 802.11n WiFi/BLE
+            * csp - manufacturer chip support package(s), all the base level functionality buiilding blocks
+                * "https://github.com/raspberrypi/pico-sdk"
+                    * https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html
+        * hardware - hardware dependent defintions of capabilities and abstraction from csp defined pin/port names
+            * "hw_description.h" - generic redirection to hw layers
+            * "ogc_hw_rp_2040_pico_w" - Raspberry Pi Pico-W Processor Board definitions
+            * "ogc_hw_deskpi_picomate" - Raspberry Pi Pico Development Baseboard definitions
 
 ## Hardware
 
@@ -100,33 +118,33 @@ User Interface - Inputs
     Rotary Encoder ( GPIO )
         A - GP7
         B - GP6
-    Microphone ( PDM )
+    Microphone [ ZTS6531S ] ( PDM )
         CLK - GP9
         DATA - GP8
 
 User Interface - Outputs
-    RGB Lights ( GPIO )
+    RGB Lights [ WS2812 ] ( GPIO )
         DIN - GP22
-    Buzzer ( PWM )
+    Buzzer ( Generic PWM )
         CTRL - GP27
-    OLED Display 128x64 ( I2C0, addr 0x3C )
+    OLED Display 128x64 [ SSD1315 ] ( I2C0, addr 0x3C )
         SCL - GP17
         SDA - GP16
 
 Environmental Sensors
-    Gyroscope Sensor ( I2C1, addr 0x6A )
+    Gyroscope Sensor [ LSM6DS3TR-C ] ( I2C1, addr 0x6A )
         SCL - GP15
         SDA - GP14
-    3-Axis Magnetometer Sensor ( I2C1, addr 0x30 )
+    3-Axis Magnetometer Sensor [ MMC5603NJ ] ( I2C1, addr 0x30 )
         SCL - GP15
         SDA - GP14
-    Photosensitive Sensor ( I2C1, addr 0x53 )
+    Photosensitive Sensor [ LTR-381RGB-01 ] ( I2C1, addr 0x53 )
         SCL - GP15
         SDA - GP14
-    Temperature and Humidity Sensor ( I2C1, addr 0x44 )
+    Temperature and Humidity Sensor [ SHT30-DIS ] ( I2C1, addr 0x44 )
         SCL - GP15
         SDA - GP14
-    PIR Sensor ( GPIO )
+    PIR Sensor [ AS312 ] ( GPIO )
         DOUT - GP28
 ```
 
@@ -143,7 +161,7 @@ Environmental Sensors
 - https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html
 * If development is going to be done on a Raspberry Pi, a setup script is available
     * run at your own risk on other systems otherwise follow instructions at website
-    * there are Raspberry Pi specific instructions that can be skipped with certain definitions or just local editing of setup script
+    * Raspberry Pi instructions can be skipped with certain definitions or just local setup script editing
 ```
 ./pico_setup.sh
 ```
